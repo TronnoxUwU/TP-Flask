@@ -22,6 +22,14 @@ class LoginForm(FlaskForm):
         m.update(self.password.data.encode())
         passwd = m.hexdigest()
         return user if passwd == user.password else None
+    
+class BookForm(FlaskForm):
+    id = HiddenField ("id")
+    price = StringField("Prix",validators =[DataRequired()])
+    title = StringField("Titre",validators =[DataRequired()])
+    url = StringField("Url",validators =[DataRequired()])
+    img = StringField("Image",validators =[DataRequired()])
+    author_id = StringField("Id de l'auteur",validators =[DataRequired()])
 
 class AuthorForm(FlaskForm):
     id = HiddenField ("id")
@@ -60,6 +68,29 @@ def detail(id):
     return render_template(
         "detail.html",
         book=get_book_by_id(int(id)))
+
+@app.route("/edit/book/<int:id>")
+def edit_book(id):
+    b = get_book_by_id(id)
+    f = BookForm(id=b.id, price=b.price, title=b.title, url=b.url, img=b.img, author_id=b.author_id )
+    return render_template(
+        "edit-book.html", book=b, form=f)
+
+@app.route("/save/book/", methods =("POST",))
+def save_book():
+    b = None
+    f = BookForm()
+    if f.validate_on_submit():
+        b = get_book_by_id(int(f.id.data))
+        b.price = f.price.data
+        b.title = f.title.data
+        b.url = f.url.data
+        b.img = f.img.data
+        b.author_id = f.author_id.data
+        db.session.commit()
+        return redirect(url_for("detail", id=b.id))
+    b = get_book_by_id(int(f.id.data))
+    return render_template("edit-book.html", author=b, form=f)
 
 @app.route("/author/<id>")
 def one_author(id):
