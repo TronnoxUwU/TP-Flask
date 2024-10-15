@@ -75,6 +75,27 @@ def edit_author(id):
     return render_template (
         "edit-author.html",
         author=a, form=f)
+    
+@app.route("/search/<srch>")
+def search_authors_books(srch):
+    print("feur")
+    les_autheurs = get_all_author()
+    def livres_par_autheur(list_auth, nom) -> list:
+        book = []
+        for auth in list_auth:
+            auth:Author
+            try:
+                if auth.name[0:len(nom)].lower() == nom.lower():
+                    book.extend(get_books_by_author(auth.id))
+            except:
+                continue
+        print(book)
+        return book
+    
+    return render_template(
+        "home.html",
+        title="My Books !",
+        books = livres_par_autheur(les_autheurs, srch))
 
 @app.route("/save/author/", methods =("POST",))
 def save_author():
