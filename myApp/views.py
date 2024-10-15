@@ -6,7 +6,7 @@ from wtforms import StringField , HiddenField
 from wtforms.validators import DataRequired
 from wtforms import PasswordField
 from hashlib import sha256
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from flask import request
 
 
@@ -70,6 +70,7 @@ def detail(id):
         book=get_book_by_id(int(id)))
 
 @app.route("/edit/book/<int:id>")
+@login_required
 def edit_book(id):
     b = get_book_by_id(id)
     f = BookForm(id=b.id, price=b.price, title=b.title, url=b.url, img=b.img, author_id=b.author_id )
@@ -100,6 +101,7 @@ def one_author(id):
         books = get_books_by_author(int(id)))
 
 @app.route("/edit/author/<int:id>")
+@login_required
 def edit_author(id):
     a = get_author_by_id(id)
     f = AuthorForm(id=a.id, name=a.name)
@@ -121,6 +123,7 @@ def save_author():
 # add,author
 
 @app.route("/add/author/")
+@login_required
 def add_author():
     f = AuthorForm(id=None, name="")
     return render_template (
