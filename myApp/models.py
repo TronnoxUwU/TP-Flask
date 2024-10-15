@@ -36,6 +36,9 @@ def get_sample():
 def get_all_author():
     return Author.query.all()
 
+def get_all_books():
+    return Book.query.all()
+
 def get_book_by_id(id:int):
     return Book.query.get_or_404(id)
 
