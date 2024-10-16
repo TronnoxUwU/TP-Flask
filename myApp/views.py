@@ -35,6 +35,9 @@ class AuthorForm(FlaskForm):
     id = HiddenField ("id")
     name = StringField("Nom",validators =[DataRequired()])
 
+class IdForm(FlaskForm):
+    id = StringField("Id",validators =[DataRequired()])
+
 @app.route("/login/", methods=("GET","POST",))
 def login():
     print("login")
@@ -77,6 +80,25 @@ def edit_book(id):
     return render_template(
         "edit-book.html", book=b, form=f)
 
+@app.route("/delete/book/")
+@login_required
+def delete_book():
+    f = IdForm(id=None)
+    return render_template(
+        "delete-book.html", form=f)
+
+@app.route("/delete/save/book/", methods =("POST",))
+def save_delete_book():
+    f = IdForm()
+    print(int(f.id.data),f.validate_on_submit())
+    if f.validate_on_submit():
+        b = get_book_by_id(int(f.id.data))
+        db.session.delete(b)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template(
+        "delete-book.html", form=f)
+
 @app.route("/save/book/", methods =("POST",))
 def save_book():
     b = None
@@ -92,6 +114,7 @@ def save_book():
         return redirect(url_for("detail", id=b.id))
     b = get_book_by_id(int(f.id.data))
     return render_template("edit-book.html", author=b, form=f)
+
 
 @app.route("/author/<id>")
 def one_author(id):
