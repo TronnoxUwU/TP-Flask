@@ -3,7 +3,7 @@ from .models import *
 from flask import render_template, url_for, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField , HiddenField, SubmitField, FloatField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from wtforms import PasswordField
 from hashlib import sha256
 from flask_login import login_user, current_user, logout_user
@@ -32,9 +32,9 @@ class SearchForm(FlaskForm):
     submit = SubmitField('Search')
 
 class AdvancedSearchForm(FlaskForm):
-    name_auth = StringField('Nom de l\'auteur')
-    name_book = StringField('Nom du livre')
-    max_price = FloatField('Prix maximum')
+    name_auth = StringField('Nom de l\'auteur', validators=[Optional()])
+    name_book = StringField('Nom du livre', validators=[Optional()])
+    max_price = FloatField('Prix maximum', validators=[Optional()])
     submit = SubmitField('Search')
 
 @app.route("/login/", methods=("GET","POST",))
@@ -123,6 +123,7 @@ def advanced_search():
         name_auth = f.name_auth.data
         name_book = f.name_book.data
         max_price = f.max_price.data
+        print(name_auth + " - " + name_book + " - " + str(max_price))
 
         # Fonction de filtrage des livres
         def filter_books(name_auth, name_book, max_price):

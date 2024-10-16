@@ -1,4 +1,9 @@
 {% extends "baseBS.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css')}}"> 
+{% endblock %}
+
 {% block content %}
 <h1>Edit author: {{ author.name }}</h1>
 <form method="POST" action="{{ url_for('save_author') }}">
