@@ -1,0 +1,26 @@
+{% extends 'baseBS.html' %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='home.css')}}"> 
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Recherche Avancée</h1>
+    <form action="{{ url_for('advanced_search') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            <label for="name_auth" class="form-label">Nom de l'auteur</label>
+            {{ form.name_auth(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            <label for="name_book" class="form-label">Nom du livre</label>
+            {{ form.name_book(class="form-control") }}
+        </div>
+        <div class="mb-3">
+            <label for="max_price" class="form-label">Prix maximum</label>
+            {{ form.max_price(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Rechercher</button>
+    </form>
+</div>
+{% endblock %}
