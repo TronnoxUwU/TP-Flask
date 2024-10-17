@@ -116,6 +116,25 @@ def save_delete_book():
     return render_template(
         "delete-book.html", form=f)
 
+@app.route("/delete/author/")
+@login_required
+def delete_author():
+    f = IdForm(id=None)
+    return render_template(
+        "delete-author.html", form=f)
+
+@app.route("/delete/save/author/", methods =("POST",))
+def save_delete_author():
+    f = IdForm()
+    print(int(f.id.data),f.validate_on_submit())
+    if f.validate_on_submit():
+        a = get_author_by_id(int(f.id.data))
+        db.session.delete(a)
+        db.session.commit()
+        return redirect(url_for("home"))
+    return render_template(
+        "delete-book.html", form=f)
+
 @app.route("/save/book/", methods =("POST",))
 def save_book():
     b = None
