@@ -2,7 +2,6 @@ from .app import db
 from flask_login import UserMixin
 
 class Author(db.Model):
-    __tablename__ = "AUTHOR"
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
@@ -12,7 +11,7 @@ class Author(db.Model):
 
 
 class Book(db.Model):
-    __tablename__ = "BOOK"
+    __tablename__ = "book"
     
     id = db.Column(db.Integer , primary_key =True)
     price = db.Column(db.Float)
@@ -22,19 +21,18 @@ class Book(db.Model):
     author_id = db.Column(db.Integer , db.ForeignKey("author.id"))
     
     author = db.relationship("Author",backref=db.backref("books", lazy="dynamic"))
-    estAdore = db.relationship("Favorite", back_populates="favBook")
+    estAdore = db.relationship("Favorites", back_populates="favBook")
     
 
     def __repr__(self ):
         return self.title
 
 class User(db.Model,UserMixin):
-    __tablename__ = "USER"
     
     username = db.Column(db.String(50), primary_key=True)
     password = db.Column(db.String(64))
     
-    adore = db.relationship("Favorite", back_populates="userFav")
+    adore = db.relationship("Favorites", back_populates="userFav")
 
     def __repr__(self):
         return self.username
@@ -43,36 +41,33 @@ class User(db.Model,UserMixin):
         return self.username
 
 class Favorites(db.Model):
-    __tablename__ = "FAVORITE"
+    __tablename__ = "favorite"
     
-    user = db.Column(db.String(50), db.ForeignKey("USER.username"), primary_key=True)
+    user = db.Column(db.String(50), db.ForeignKey("user.username"), primary_key=True)
     userFav = db.relationship("User", back_populates="adore")
     
-    id = db.Column(db.Integer , db.ForeignKey("BOOK.id"), primary_key =True)
+    id = db.Column(db.Integer , db.ForeignKey("book.id"), primary_key=True)
     favBook = db.relationship("Book", back_populates="estAdore")
-    
-    def __init__(self, user="", id=0):
-        self.user = user
-        self.id = id
         
     def __repr__(self):
-        return self.user + str(self.id)
-    
-def new_fav():
-    session = db.Session(engine)
-	
-	bur = Article( 1, "burger", 69.5)
-	session.add( bur )
-	esclave = Article(2, "esclave", 1)
-	Elysee = Article( 3, "Elysee", 240)
-	asp = Article( 4, "aspirateur dyson", 49.99)
-	
-	session.add_all( [esclave, Elysee, asp ] )
-	session.commit()
-    
-def retire_fav():
-    
-def get_favs():
+        return f"{self.user} {self.id}"
+
+def new_fav(user, id):
+    favorite = Favorites(user=user, id=id)
+    db.session.add(favorite)
+    db.session.commit()
+
+def retirer_fav(user, id):
+    fav = Favorites.query.get({"user": user, "id": id})
+    if fav:
+        db.session.delete(fav)
+        db.session.commit()
+
+def is_fav(user, id):
+    return Favorites.query.get({"user": user, "id": id}) is not None
+
+def get_favs(user):
+    return Favorites.query.filter_by(user=user).all()
     
 def get_sample():
     return Book.query.limit(10).all()

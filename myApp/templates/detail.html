@@ -7,15 +7,36 @@
 <div class="card border-light mb-3 mycard">
     <div class="card-header">{{ book.title }}</div>
     <a href="{{ book.url }}" target='_blank'>
-            <img src="{{ url_for('static', filename='images/'+book.img) }}" alt="Couverture de {{ book.title }}"
-                    title="{{ book.title }}" class="card-img-top" />
+        <img src="{{ url_for('static', filename='images/'+book.img) }}" alt="Couverture de {{ book.title }}"
+             title="{{ book.title }}" class="card-img-top" />
     </a>
+    {% if current_user.is_authenticated %}
+        {% if is_fav %}
+            <div class="card-under-header">
+                <h5> Supprimer des favoris </h5>
+                <a class="nav-link" href="{{ url_for('retire_fav', book_id=book.id) }}">
+                    <span class="coeur" title="Retirer des favoris">
+                        <img src="{{ url_for('static', filename='images/fav_icon.png') }}">
+                    </span>
+                </a>
+            </div>
+        {% else %}
+            <div class="card-under-header">
+                <h5> Ajouter aux favoris </h5>
+                <a class="nav-link" href="{{ url_for('add_fav', book_id=book.id) }}">
+                    <span class="coeur" title="Ajouter aux favoris">
+                        <img src="{{ url_for('static', filename='images/unfav_icon.png') }}">
+                    </span>
+                </a>
+            </div>
+        {% endif %}
+    {% endif %}
     <div class="card-body">
-            <h5 class="card-text card-footer">
-                    Auteur : {{ book.author }}
-            </h5>
-            <h6 class="card-text card-footer">
-                Prix : {{ book.price }} €
+        <h5 class="card-text card-footer">
+            Auteur : {{ book.author }}
+        </h5>
+        <h6 class="card-text card-footer">
+            Prix : {{ book.price }} €
         </h6>
     </div>
 </div>

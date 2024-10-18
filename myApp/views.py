@@ -76,7 +76,9 @@ def detail(id):
     return render_template(
         "detail.html",
         book=get_book_by_id(int(id)),
-        form=f)
+        form=f,
+        is_fav=is_fav(current_user.username, id)
+        )
 
 @app.route("/author/<id>")
 def one_author(id):
@@ -116,10 +118,9 @@ def livres_par_deb_titre(srch) -> list:
 
 @app.route("/advanced_search", methods=['GET', 'POST'])
 def advanced_search():
-    f = AdvancedSearchForm()  # Instancie le formulaire
+    f = AdvancedSearchForm()
 
-    if f.validate_on_submit():  # Si le formulaire est soumis et valide
-        # Récupération des données du formulaire
+    if f.validate_on_submit():
         name_auth = f.name_auth.data
         name_book = f.name_book.data
         max_price = f.max_price.data
@@ -136,10 +137,8 @@ def advanced_search():
                     filtered_books.append(book)
             return filtered_books
 
-        # Filtrer les livres en fonction des critères
         books = filter_books(name_auth, name_book, max_price)
 
-        # Renvoyer les résultats à la page home.html avec les livres filtrés
         return render_template(
             "home.html",
             title="Résultats de la recherche avancée",
@@ -147,9 +146,21 @@ def advanced_search():
             form=f
         )
     
-    # Si la méthode est GET (affichage initial), on renvoie juste le formulaire
     return render_template("search.html", form=f)
 
+@app.route("/add_fav/<int:book_id>")
+def add_fav(book_id):
+    if not is_fav(current_user.username, book_id):
+        new_fav(current_user.username, book_id)
+        db.session.commit()
+    return redirect(url_for('detail', id=book_id))
+
+@app.route("/retire_fav/<int:book_id>")
+def retire_fav(book_id):
+    if is_fav(current_user.username, book_id):
+        retirer_fav(current_user.username, book_id)
+        db.session.commit()
+    return redirect(url_for('detail', id=book_id))
 
 
 @app.route("/save/author/", methods =("POST",))
