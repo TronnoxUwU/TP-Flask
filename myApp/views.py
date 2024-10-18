@@ -148,19 +148,25 @@ def advanced_search():
     
     return render_template("search.html", form=f)
 
-@app.route("/add_fav/<int:book_id>")
+@app.route("/add_fav/<int:book_id>")  #ça marche
 def add_fav(book_id):
     if not is_fav(current_user.username, book_id):
         new_fav(current_user.username, book_id)
         db.session.commit()
     return redirect(url_for('detail', id=book_id))
 
-@app.route("/retire_fav/<int:book_id>")
+@app.route("/retire_fav/<int:book_id>")  #ça marche aussi tkt
 def retire_fav(book_id):
     if is_fav(current_user.username, book_id):
         retirer_fav(current_user.username, book_id)
         db.session.commit()
     return redirect(url_for('detail', id=book_id))
+
+@app.route('/user_favorites')
+def user_favorites():
+    user = current_user.username
+    favorite_books = get_favs(user)
+    return render_template('favorites.html', books=favorite_books, title="Mes Livres Favoris")
 
 
 @app.route("/save/author/", methods =("POST",))

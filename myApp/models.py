@@ -67,7 +67,9 @@ def is_fav(user, id):
     return Favorites.query.get({"user": user, "id": id}) is not None
 
 def get_favs(user):
-    return Favorites.query.filter_by(user=user).all()
+    favs = Favorites.query.filter_by(user=user).all()
+    books = [fav.favBook for fav in favs]
+    return books
     
 def get_sample():
     return Book.query.limit(10).all()
