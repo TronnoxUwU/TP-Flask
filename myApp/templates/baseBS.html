@@ -28,23 +28,34 @@
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Mes livres</a>
-                    </li>
                     {% if  current_user.is_authenticated  %}
-                    <li class="nav-item"><a class="nav-link">{{ current_user.username }}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">
-                      <span class="glyphicon glyphicon-log-out" title="Logout"><img src="{{ url_for('static', filename='images/25376.png') }}">
-                      </span></a></li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('delete_book') }}">Supprimer livre </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('delete_author') }}">Supprimer auteur </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="{{ url_for('add_author') }}">Ajouter auteur</a>
+                    </li>
                     {% endif %}
                   </ul>
-                    <li class="d-flex">
+
+                    <div class="d-flex">
                       <a class="nav-link active" aria-current="page" href="{{ url_for('advanced_search') }}">Recherche Avancée</a>
-                    </li>
+                    </div>
                   <form class="d-flex" action="{{ url_for('search_books') }}" method="GET">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="srch">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                   </form>
+                  {% if  current_user.is_authenticated  %}
+                  <div class="d-flex"><a class="nav-link">{{ current_user.username }}</a></li>
+                  <div class="d-flex"><a class="nav-link" href="{{ url_for('logout') }}">
+                    <span class="glyphicon glyphicon-log-out" title="Logout"><img src="{{ url_for('static', filename='images/25376.png') }}">
+                    </span></a></li>
+                  {% else %}
+                  <div class="d-flex"><a class="nav-link" href="{{ url_for('login') }}">Se connecter</a></li>
+                  {% endif %}
                 </div>
               </div>
             </nav>
