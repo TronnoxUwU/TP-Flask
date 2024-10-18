@@ -71,6 +71,8 @@ def passwd(username, password):
 @app.cli.command ()
 @click.argument("nom_genre")
 def newgenre(nom_genre ):
+
+    """Create a new category."""
     from .models import Genre
     g = Genre(nom=nom_genre)
     db.session.add(g)
@@ -80,6 +82,7 @@ def newgenre(nom_genre ):
 @click.argument("nom_genre")
 @click.argument("id_livre")
 def ajoutgenretolivre(nom_genre, id_livre):
+    """Add a book to a category."""
     from .models import GenreBook
     g = GenreBook(nom=nom_genre, id=id_livre)
     db.session.add(g)
