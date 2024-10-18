@@ -2,12 +2,12 @@
 <html lang="fr">
     <head>
         {% block head %}
-        <!-- Required meta tags -->
+
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         {% block styles %}
-            <!-- Bootstrap CSS -->
+
             {{ bootstrap.load_css() }}
         {% endblock %}
 
@@ -16,7 +16,7 @@
     </head>
     <body>
         <header>
-            <!-- Fixed navbar -->
+
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
               <div class="container-fluid">
                 <a class="navbar-brand" href="#">My Books</a>
@@ -32,6 +32,9 @@
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="{{ url_for('delete_book') }}">Supprimer livre </a>
                     </li>
+                   <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('user_favorites') }}">Mes favoris</a>
+                    </li>                    
                     <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="{{ url_for('delete_author') }}">Supprimer auteur </a>
                     </li>
@@ -59,8 +62,7 @@
                 </div>
               </div>
             </nav>
-          </header>
-        <!-- Your page content -->
+      </header>
         <main class="flex-shrink-0">
             <div class="container">
      
@@ -75,7 +77,6 @@
             </div>
           </footer>
         {% block scripts %}
-            <!-- Optional JavaScript -->
             {{ bootstrap.load_js() }}
         {% endblock %}
     </body>

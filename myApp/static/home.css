@@ -36,3 +36,25 @@ div.mycard{
     margin: auto; 
     width: 18rem; 
 }
+
+.card-under-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.card-under-header h5 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.card-under-header .coeur img {
+    width: 25px;
+    height: 25px;
+}
+
+.card-under-header a {
+    text-decoration: none;
+}
+
