@@ -16,6 +16,23 @@ class Book(db.Model):
     img = db.Column(db.String(100))
     author_id = db.Column(db.Integer , db.ForeignKey("author.id"))
     author = db.relationship("Author",backref=db.backref("books", lazy="dynamic"))
+    genrelivre = db.relationship("GenreBook",back_populates="livres")
+
+    def __repr__(self ):
+        return self.title
+    
+class Genre(db.Model):
+    nom = db.Column(db.String(100) , primary_key =True)
+    genrelivre = db.relationship("GenreBook",back_populates="genres")
+
+    def __repr__(self ):
+        return self.title
+    
+class GenreBook(db.Model):
+    nom = db.Column(db.String(100) , db.ForeignKey("genre.nom"), primary_key =True)
+    id = db.Column(db.Integer , db.ForeignKey("book.id") , primary_key =True)
+    livres = db.relationship("Book",back_populates="genrelivre")
+    genres = db.relationship("Genre",back_populates="genrelivre")
 
     def __repr__(self ):
         return self.title

@@ -67,3 +67,20 @@ def passwd(username, password):
     u = get_user_by_username(username)
     u.password = password
     db.session.commit()
+
+@app.cli.command ()
+@click.argument("nom_genre")
+def newgenre(nom_genre ):
+    from .models import Genre
+    g = Genre(nom=nom_genre)
+    db.session.add(g)
+    db.session.commit()
+
+@app.cli.command ()
+@click.argument("nom_genre")
+@click.argument("id_livre")
+def ajoutgenretolivre(nom_genre, id_livre):
+    from .models import GenreBook
+    g = GenreBook(nom=nom_genre, id=id_livre)
+    db.session.add(g)
+    db.session.commit()
