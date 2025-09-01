@@ -32,3 +32,5 @@ Favori :
 Modifications :
 - Possibilité de crée/modifier/supprimer un auteur
 - Possibilité de modifier/supprimer un livre
+
+UwU
